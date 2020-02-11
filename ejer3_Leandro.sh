@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Temp folder and variables
 # Name some variables and create temporary folder and files to use
 $(mkdir /tmp/parseador_ldif.$$)
@@ -155,23 +154,3 @@ while true; do
   esac
 done
 exit 0
-
-
-/etc/passwd file:
-	login name
-	encrypted password (passwd username) /etc/shadow
-	uid number
-	gid number (groups in /etc/group)
-	user info: name...
-	home directory (mkdir /home/username | chown username:research /home/username | chmod 700 /home/username)
-		cp /etc/skel/.[a-zA-Z]*~username
-		chmod 644 ~username/.[a-zA-Z]*
-		chown username:research ~username/.*
-	login shell (/bin/bash)
-	
-/etc/group file:
-	groupname
-	password
-	gid
-	user-list
-
