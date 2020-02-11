@@ -47,12 +47,31 @@ function show_inputDirectorio(){
 function show_inputUID(){
 	dialog --title "[ U I D ]" \
 	--backtitle "$backtitle" \
-	--inputbox "Escriba un UID de usuario " 8 60 "$vGrupo" 2>$INPUT
-	cut -d: -f3 /etc/passwd
-	vGrupo=$(cat $INPUT)
-	ITEM="Grupo"
+	--inputbox "Escriba un UID de usuario (recomendado mayor que 1000) " 8 60 "$vUID" 2>$INPUT
+	vUID=$(cat $INPUT)
+	ITEM="UID"
 }
 
+function show_datos(){	
+	dialog  --clear \
+			--title "[-- I N F O --]" \
+			--backtitle "$backtitle" \
+			--ok-label "Datos actuales en el fichero '/etc/passwd'" \
+			--textbox /etc/passwd 10 40
+}
+
+
+# Checking dialog
+function check(){
+	dialog  --clear \
+			--title "[-- I N F O --]" \
+			--backtitle "$backtitle" \
+			--ok-label "Datos a introducir" \
+			--msgbox " Nombre de usuario: $vUser
+			Grupo: $vGrupo
+			UID: $vUID
+			Directorio: $vDirectorio" 10 40
+}
 
 # What to do when every variable is set
 # Check if they are set and double check it to user before adding it to the LDAP
@@ -67,9 +86,9 @@ function continuar(){
 	elif [ -z "$vUID" ]
 		then
 			error_nenough
-	elif [ -z "$vCSV" ]
+	elif [ -z "$vGrupo" ]
 		then
-			error_nenough
+			error_nenough	
 	else
 		dialog  --clear \
 			--title "[-- I N F O --]" \
