@@ -58,6 +58,7 @@ function show_datos(){
 			--backtitle "$backtitle" \
 			--ok-label "Datos actuales en el fichero '/etc/passwd'" \
 			--textbox /etc/passwd 10 40
+	ITEM="Datos"
 }
 
 
@@ -71,6 +72,7 @@ function check(){
 			Grupo: $vGrupo
 			UID: $vUID
 			Directorio: $vDirectorio" 10 40
+	ITEM="Comprobar"
 }
 
 function adduser(){
@@ -95,26 +97,15 @@ function add(){
 			error_nenough	
 	else
 		dialog  --clear \
-			--title "[-- I N F O --]" \
+			--title "[ C O N F I R M A C I Ó N ]" \
 			--backtitle "$backtitle" \
-			--ok-label "Crear LDIF" \
-			--msgbox " Nombre del admin: $vAdmin
-			Dominio: $vDominio.$vExtension
-			Ruta del CSV: $vCSV" 10 40
-		exit_status=$?
-		if [ $exit_status -eq 0 ]
+			--yes-label "Si" \
+			--yesno "Confirme que desea continuar " 10 40
+		answer_option=$?
+		if  [ $answer_option -eq 0 ]
 			then
-				dialog  --clear \
-					--title "[ C O N F I R M A C I Ó N ]" \
-					--backtitle "$backtitle" \
-					--yes-label "Si" \
-					--yesno "Confirme que desea continuar " 10 40
-				answer_option=$?
-				if  [ $answer_option -eq 0 ]
-					then
-						adduser
-				fi
-		fi
+				adduser
+		fi		
 	fi
 }
 
