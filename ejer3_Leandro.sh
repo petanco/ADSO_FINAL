@@ -6,9 +6,9 @@ $(mkdir /tmp/parseador_ldif.$$)
 OUTPUT=/tmp/parseador_ldif.$$/output.$$
 INPUT=/tmp/parseador_ldif.$$/input.$$
 let vUser
-let vGrupo
 let vDirectorio
 let vUID
+vGrupo=2000
 backtitle="Gestión de usuarios"
 
 # Delete temp files if program is closed or closes
@@ -29,7 +29,7 @@ function show_inputUserName(){
 function show_inputGrupo(){
 	dialog --title "[ D O M I N I O ]" \
 	--backtitle "$backtitle" \
-	--inputbox "Escriba el nombre del grupo al que quiere pertenecer (en caso de dejar en blanco será el por defecto) " 8 60 "$vGrupo" 2>$INPUT
+	--inputbox "Escriba el GID del grupo al que quiere pertenecer (recomendable, '2000') " 8 60 "$vGrupo" 2>$INPUT
 	vGrupo=$(cat $INPUT)
 	ITEM="Grupo"
 }
@@ -38,16 +38,17 @@ function show_inputGrupo(){
 function show_inputDirectorio(){
 	dialog --title "[ D I R E C T O R I O ]" \
 	--backtitle "$backtitle" \
-	--inputbox "Escriba el nombre del directorio home del usuario " 8 60 "$vDirectorio" 2>$INPUT
+	--inputbox "Escriba el nombre del directorio home del usuario (ejemplo: '/home/pepe')" 8 60 "$vDirectorio" 2>$INPUT
 	vDirectorio=$(cat $INPUT)
 	ITEM="Directorio"
 }
 
 # UID input dialog
-function show_inputGrupo(){
-	dialog --title "[ D O M I N I O ]" \
+function show_inputUID(){
+	dialog --title "[ U I D ]" \
 	--backtitle "$backtitle" \
-	--inputbox "Escriba el nombre del grupo al que quiere pertenecer (en caso de dejar en blanco será el por defecto) " 8 60 "$vGrupo" 2>$INPUT
+	--inputbox "Escriba un UID de usuario " 8 60 "$vGrupo" 2>$INPUT
+	cut -d: -f3 /etc/passwd
 	vGrupo=$(cat $INPUT)
 	ITEM="Grupo"
 }
@@ -160,7 +161,7 @@ done
 exit 0
 
 
-
+vUser:x:vUID:vGrupo:vUser:vDirectorio:/bin/bash
 
 
 /etc/passwd file:
