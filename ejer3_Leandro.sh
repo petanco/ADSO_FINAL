@@ -73,9 +73,13 @@ function check(){
 			Directorio: $vDirectorio" 10 40
 }
 
+function adduser(){
+	echo "$vUser:x:$vUID:$vGrupo:$vUser:$vDirectorio:/bin/bash" >> /etc/passwd
+	passwd $vUser
+}
 # What to do when every variable is set
 # Check if they are set and double check it to user before adding it to the LDAP
-function continuar(){
+function add(){
 	ITEM="Salir"
 	if [ -z "$vUser" ]
 		then
@@ -104,29 +108,11 @@ function continuar(){
 					--title "[ C O N F I R M A C I Ó N ]" \
 					--backtitle "$backtitle" \
 					--yes-label "Si" \
-					--yesno "Confirme que desea continuar (no podrá deshacer cambios una vez añadido el LDIF)" 10 40
+					--yesno "Confirme que desea continuar " 10 40
 				answer_option=$?
 				if  [ $answer_option -eq 0 ]
 					then
-						# Get last uidNumber to begin adding from that one
-						getLast
-
-						# Loop to create .ldif
-						ldif_loop
-
-						# Show first & last ldif entries
-						ldifShowFL
-
-						# Add entries to LDAP
-						ldapadd -x -D cn=$vAdmin,dc=$vDominio,dc=$vExtension -W -f /tmp/parseador_ldif.$$/script_addUsers.ldif
-
-						# Show last two added LDAP users
-						slapcat | tail -44 > $OUTPUT
-						dialog  --clear \
-							--title "[ L A S T - C H E C K ]" \
-							--backtitle "$backtitle" \
-							--exit-label "Salir" \
-							--textbox $OUTPUT 40 40
+						adduser
 				fi
 		fi
 	fi
@@ -178,9 +164,6 @@ while true; do
   esac
 done
 exit 0
-
-
-vUser:x:vUID:vGrupo:vUser:vDirectorio:/bin/bash
 
 
 /etc/passwd file:
